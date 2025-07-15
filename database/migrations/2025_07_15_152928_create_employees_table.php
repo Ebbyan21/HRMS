@@ -13,20 +13,14 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id();
-
-            // Relasi ke tabel users, WAJIB ADA
             $table->foreignId('user_id')->unique()->constrained('users')->onDelete('cascade');
-
-            // Info Pekerjaan
             $table->string('job_title');
             $table->string('department');
             $table->date('hire_date');
-
-            // Info Pribadi (boleh null/kosong)
             $table->string('phone_number')->nullable();
             $table->text('address')->nullable();
-
-            $table->timestamps(); // Kolom created_at & updated_at
+            $table->foreignId('reports_to')->nullable()->constrained('users'); // <-- TAMBAHKAN INI
+            $table->timestamps();
         });
     }
 

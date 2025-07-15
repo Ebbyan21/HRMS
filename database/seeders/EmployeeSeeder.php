@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Employee;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role; // <-- TAMBAHKAN INI
 
 class EmployeeSeeder extends Seeder
 {
@@ -15,15 +16,18 @@ class EmployeeSeeder extends Seeder
      */
     public function run(): void
     {
-        // --- BIKIN 3 USER UTAMA DULU ---
+        // Buat Roles dulu
+        $adminRole = Role::create(['name' => 'Admin']);
+        $managerRole = Role::create(['name' => 'Manager']);
+        $employeeRole = Role::create(['name' => 'Employee']);
 
         // 1. Bikin User Admin
         $adminUser = User::create([
             'name' => 'Admin HRMS',
             'email' => 'admin@hrms.com',
-            'password' => Hash::make('password'), // passwordnya: "password"
+            'password' => Hash::make('password'),
         ]);
-        // (Kita nggak bikinin data employee buat admin, karena dia bukan karyawan biasa)
+        $adminUser->assignRole($adminRole);
 
         // 2. Bikin User Manager
         $managerUser = User::create([
@@ -31,40 +35,38 @@ class EmployeeSeeder extends Seeder
             'email' => 'manager@hrms.com',
             'password' => Hash::make('password'),
         ]);
+        $managerUser->assignRole($managerRole);
         Employee::create([
             'user_id' => $managerUser->id,
             'job_title' => 'Project Manager',
             'department' => 'Technology',
             'hire_date' => '2022-01-15',
-            'phone_number' => '081234567890',
-            'address' => 'Jl. Jend. Sudirman Kav. 52-53, Jakarta Selatan',
         ]);
 
-        // 3. Bikin User Karyawan Biasa
+        // 3. Bikin User Karyawan Biasa di bawah Budi
         $employeeUser = User::create([
             'name' => 'Citra Karyawan',
             'email' => 'employee@hrms.com',
             'password' => Hash::make('password'),
         ]);
+        $employeeUser->assignRole($employeeRole);
         Employee::create([
             'user_id' => $employeeUser->id,
             'job_title' => 'Frontend Developer',
             'department' => 'Technology',
             'hire_date' => '2023-03-20',
-            'phone_number' => '089876543210',
-            'address' => 'Jl. Gatot Subroto No. 12, Jakarta Pusat',
+            'reports_to' => $managerUser->id, // Citra lapor ke Budi
         ]);
 
-
-        // --- SEKARANG, BIKIN 20 KARYAWAN PALSU LAINNYA ---
-        User::factory(20)->create()->each(function ($user) {
+        // Bikin 20 karyawan palsu lainnya, lapor ke Budi juga
+        User::factory(20)->create()->each(function ($user) use ($employeeRole, $managerUser) {
+            $user->assignRole($employeeRole);
             Employee::create([
                 'user_id' => $user->id,
                 'job_title' => fake()->jobTitle(),
-                'department' => fake()->randomElement(['Technology', 'Marketing', 'Finance', 'Human Resources']),
+                'department' => 'Technology',
                 'hire_date' => fake()->date(),
-                'phone_number' => fake()->phoneNumber(),
-                'address' => fake()->address(),
+                'reports_to' => $managerUser->id, // Semua lapor ke Budi
             ]);
         });
     }

@@ -4,16 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo; // <--- TAMBAHKAN INI
 
 class Employee extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'user_id',
         'job_title',
@@ -21,7 +17,24 @@ class Employee extends Model
         'hire_date',
         'phone_number',
         'address',
+        'reports_to', // <--- TAMBAHKAN INI
     ];
+    
+    // --- TAMBAHKAN BLOK DI BAWAH INI ---
+    /**
+     * Get the user for the employee record.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
-    // Nanti kita bakal tambahin relasi di sini
+    /**
+     * Get the manager for the employee.
+     */
+    public function manager(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'reports_to');
+    }
+    // ------------------------------------
 }
