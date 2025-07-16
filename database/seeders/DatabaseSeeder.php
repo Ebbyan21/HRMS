@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             OnboardingProcessSeeder::class,
             AssetSeeder::class,
             RecruitmentSeeder::class,
+            TrainingSeeder::class,
         ]);
     }
 }
