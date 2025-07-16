@@ -73,4 +73,9 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Employee::class, 'reports_to');
     }
     // ------------------------------------
+
+    public function assets(): HasMany
+    {
+        return $this->hasMany(Asset::class, 'assigned_to_user_id');
+    }
 }

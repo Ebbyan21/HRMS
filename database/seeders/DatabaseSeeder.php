@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             PerformanceReviewSeeder::class,
             OnboardingTemplateSeeder::class,
             OnboardingProcessSeeder::class,
+            AssetSeeder::class,
         ]);
     }
 }
