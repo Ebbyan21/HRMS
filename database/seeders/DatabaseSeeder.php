@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             AssetSeeder::class,
             RecruitmentSeeder::class,
             TrainingSeeder::class,
+            PayrollSeeder::class,
         ]);
     }
 }
