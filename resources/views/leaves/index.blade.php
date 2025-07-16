@@ -8,6 +8,25 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
+            {{-- Tampilkan Pengumuman --}}
+            @if($announcements->isNotEmpty())
+            <div class="p-4 sm:p-8 bg-blue-50 border-l-4 border-blue-400">
+                <h2 class="text-lg font-medium text-gray-900 mb-2">
+                    📢 Pengumuman Terbaru
+                </h2>
+                <div class="space-y-4">
+                    @foreach($announcements as $announcement)
+                        <div class="prose max-w-none text-sm text-gray-700">
+                            <h3 class="text-md font-semibold">{{ $announcement->title }}</h3>
+                            {!! $announcement->content !!}
+                            <p class="text-xs text-gray-500 mt-1">Diposting pada {{ $announcement->created_at->format('d M Y') }}</p>
+                        </div>
+                        @if(!$loop->last) <hr> @endif
+                    @endforeach
+                </div>
+            </div>
+            @endif
+
             {{-- Form Pengajuan Cuti --}}
             <div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
                 <div class="max-w-xl">

@@ -12,11 +12,15 @@ class LeaveRequestController extends Controller
 {
     public function index(): View
     {
+        // Ambil data cuti milik user yang sedang login saja
         $leaveRequests = LeaveRequest::where('user_id', auth()->id())
             ->orderBy('created_at', 'desc')
-            ->paginate(10); // Kita pakai paginate biar rapi
-            
-        return view('leaves.index', compact('leaveRequests'));
+            ->paginate(10);
+
+        // Ambil 3 pengumuman terbaru
+        $announcements = \App\Models\Announcement::latest()->take(3)->get();
+
+        return view('leaves.index', compact('leaveRequests', 'announcements'));
     }
 
     public function store(Request $request): RedirectResponse
