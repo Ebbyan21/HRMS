@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             LeaveRequestSeeder::class,
             PerformanceReviewSeeder::class,
             OnboardingTemplateSeeder::class,
+            OnboardingProcessSeeder::class,
         ]);
     }
 }
