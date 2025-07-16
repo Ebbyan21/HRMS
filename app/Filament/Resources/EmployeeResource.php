@@ -77,6 +77,16 @@ class EmployeeResource extends Resource
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
                 ]),
+            ])
+            ->headerActions([
+                Tables\Actions\Action::make('export')
+                    ->label('Export to Excel')
+                    ->color('success')
+                    ->icon('heroicon-o-document-arrow-down')
+                    ->action(function () {
+                        // Panggil class export yang tadi kita buat
+                        return \Maatwebsite\Excel\Facades\Excel::download(new \App\Exports\EmployeesExport, 'employees-data.xlsx');
+                    })
             ]);
     }
 
