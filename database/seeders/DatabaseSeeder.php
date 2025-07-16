@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             RecruitmentSeeder::class,
             TrainingSeeder::class,
             PayrollSeeder::class,
+            AttendanceSeeder::class,
         ]);
     }
 }

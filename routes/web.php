@@ -2,16 +2,24 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Web\LeaveRequestController;
-use App\Http\Controllers\Web\ClaimController; // <--- TAMBAHKAN INI DI ATAS
+use App\Http\Controllers\Web\ClaimController;
+use App\Http\Controllers\Web\AttendanceController;
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+// PERUBAHAN 1: Pas buka localhost, langsung lempar ke halaman login
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('login');
 });
 
+// PERUBAHAN 2: Setelah login, beneran ke halaman dashboard dulu
 Route::get('/dashboard', function () {
-    // Arahkan ke halaman cuti jika sudah login
-    return redirect()->route('leaves.index');
+    return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -22,14 +30,14 @@ Route::middleware('auth')->group(function () {
     // Route untuk fitur cuti
     Route::get('/leaves', [LeaveRequestController::class, 'index'])->name('leaves.index');
     Route::post('/leaves', [LeaveRequestController::class, 'store'])->name('leaves.store');
-});
-
-Route::middleware('auth')->group(function () {
-    // ... route profile dan leaves yang sudah ada
 
     // Route untuk fitur klaim
     Route::get('/claims', [ClaimController::class, 'index'])->name('claims.index');
     Route::post('/claims', [ClaimController::class, 'store'])->name('claims.store');
+
+    // Route untuk Absensi
+    Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn'])->name('attendance.clock-in');
+    Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut'])->name('attendance.clock-out');
 });
 
 require __DIR__.'/auth.php';
