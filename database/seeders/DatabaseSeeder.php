@@ -24,6 +24,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             EmployeeSeeder::class,
             KpiSeeder::class,
+            AnnouncementSeeder::class,
+            LeaveRequestSeeder::class,
+            PerformanceReviewSeeder::class,
         ]);
     }
 }
