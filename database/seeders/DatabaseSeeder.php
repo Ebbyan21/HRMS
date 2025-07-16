@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         // Panggil seeder baru kita di sini
         $this->call([
             EmployeeSeeder::class,
+            KpiSeeder::class,
         ]);
     }
 }
