@@ -93,7 +93,7 @@ class EmployeeResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\SalariesRelationManager::class,
         ];
     }
 

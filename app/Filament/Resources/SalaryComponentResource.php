@@ -1,0 +1,39 @@
+<?php
+namespace App\Filament\Resources;
+use App\Filament\Resources\SalaryComponentResource\Pages;
+use App\Models\SalaryComponent;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
+class SalaryComponentResource extends Resource
+{
+    protected static ?string $model = SalaryComponent::class;
+    protected static ?string $navigationIcon = 'heroicon-o-wallet';
+    protected static ?string $navigationGroup = 'Payroll';
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\TextInput::make('name')->required()->maxLength(255),
+                Forms\Components\Select::make('type')->options(['allowance' => 'Allowance', 'deduction' => 'Deduction'])->required(),
+                Forms\Components\Toggle::make('is_fixed')->required(),
+            ]);
+    }
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                Tables\Columns\TextColumn::make('name')->searchable(),
+                Tables\Columns\TextColumn::make('type')->badge(),
+                Tables\Columns\IconColumn::make('is_fixed')->boolean(),
+            ])
+            ->actions([Tables\Actions\EditAction::make(), Tables\Actions\DeleteAction::make()])
+            ->bulkActions([Tables\Actions\BulkActionGroup::make([Tables\Actions\DeleteBulkAction::make()])]);
+    }
+    public static function getPages(): array
+    {
+        return ['index' => Pages\ListSalaryComponents::route('/'), 'create' => Pages\CreateSalaryComponent::route('/create'), 'edit' => Pages\EditSalaryComponent::route('/{record}/edit')];
+    }
+}
